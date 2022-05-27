@@ -33,9 +33,11 @@ spec:
             {{- toYaml .Values.securityContext | nindent 12 }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
+          {{- if .Values.configMap.enabled }}
           envFrom:
             - configMapRef:
-                name: roboshop-cm
+                name: {{ .Values.component }}-cm
+          {{- end }}
           ports:
             - name: http
               containerPort: {{ .Values.service.containerPort }}
